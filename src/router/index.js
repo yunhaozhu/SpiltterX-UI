@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Dashboard from "../views/Dashboard";
 import About from "../pages/About.vue";
+import Home from "../pages/Home.vue";
 
 Vue.use(VueRouter)
 
@@ -10,10 +11,23 @@ const routes = [
     path: '/',
     name: 'Dashboard',
     component: Dashboard,
+    meta: {
+      title: 'SplitterX',
+    },
     children: [
       {
+        path: '',
+        component: Home,
+        meta: {
+          title: 'SplitterX',
+        },
+      },
+      {
         path: 'about',
-        component: About
+        component: About,
+        meta: {
+          title: 'About',
+        },
       }
     ]
   },

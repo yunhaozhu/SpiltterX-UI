@@ -1,5 +1,5 @@
 <template>
-  <div class="w-62 h-screen shadow-xl bg-white font-display">
+  <div class="sticky top-0 w-62 h-screen shadow-xl bg-white font-display">
     <div class="flex flex-col w-58 pt-6 pl-4">
       <div class="flex h-10 mb-6 text-purple-500 text-2xl font-semibold">
         <img class="m-1 w-10 h-10" alt="logo" src="../../assets/logo.png">
