@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Dashboard from "../views/Dashboard";
 import About from "../pages/About.vue";
 import Home from "../pages/Home.vue";
+import Login from "../pages/Login.vue";
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,13 @@ const routes = [
         component: About,
         meta: {
           title: 'About',
+        },
+      },
+      {
+        path: 'login',
+        component: Login,
+        meta: {
+          title: 'Sign In'
         },
       }
     ]
