@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white h-full mx-6 my-3 shadow-card rounded-md font-display">
+  <div class="bg-white h-full mx-7 my-3 shadow-card rounded-md font-display">
     <div class="px-8 py-12 w-full mx-auto lg:px-12 2xl:w-10/12">
       <!-- banner -->
       <div class="mb-20 w-full sm:text-center">

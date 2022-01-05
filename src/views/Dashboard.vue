@@ -1,7 +1,7 @@
 <template>
-  <div class="flex w-screen">
+  <div class="flex w-screen bg-gray-50">
     <SideBar></SideBar>
-    <div class="flex flex-col flex-1">
+    <div class="flex-col flex-1">
       <NavBar></NavBar>
       <router-view/>
     </div>

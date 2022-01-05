@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Dashboard from "../views/Dashboard";
-import About from "../pages/About.vue";
-import Home from "../pages/Home.vue";
-import Login from "../pages/Login.vue";
+import About from "../pages/About";
+import Home from "../pages/Home";
+import Login from "../pages/Login";
+import Bill from "../pages/Bill";
 
 Vue.use(VueRouter)
 
@@ -36,6 +37,10 @@ const routes = [
         meta: {
           title: 'Sign In'
         },
+      },
+      {
+        path: 'bill',
+        component: Bill
       }
     ]
   },

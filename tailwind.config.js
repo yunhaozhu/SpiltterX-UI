@@ -11,7 +11,7 @@ module.exports = {
       '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
       '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
       'nav': '0 0 10px 1px rgba(139, 92, 246, 0.5)',
-      'card': '0 0 20px 1px rgba(0, 0, 0, 0.1)',
+      'card': '0 0 20px -3px rgba(0, 0, 0, 0.1)',
       inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
       none: 'none',
     },

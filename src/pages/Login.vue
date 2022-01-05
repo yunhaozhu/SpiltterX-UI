@@ -1,9 +1,9 @@
 <template>
-  <div class="flex mx-6 my-3 pt-16 h-full overflow-hidden bg-white rounded-lg shadow-lg justify-center">
+  <div class="flex mx-7 my-3 pt-16 h-full overflow-hidden bg-white rounded-lg shadow-card justify-center">
     <div class="flex-grow max-w-md px-6 py-8 md:px-8">
       <h1 class="mb-5 text-4xl font-bold text-center text-purple-700">SplitterX</h1>
 
-      <p class="mb-8 text-md text-center text-gray-600">Sign In to enjoy all features</p>
+      <p class="mb-16 text-md text-center text-gray-600">Sign In to enjoy all features</p>
 
       <a href="#" class="flex items-center justify-center mt-4 text-gray-600 transition-colors duration-200 transform border rounded-lg hover:bg-gray-50">
         <div class="px-4 py-2">
@@ -17,7 +17,7 @@
         <span class="w-5/6 pr-12 py-3 font-medium text-center">Sign in with Google</span>
       </a>
 
-      <div class="flex items-center justify-between my-6">
+      <div class="flex items-center justify-between mt-8">
         <span class="w-1/5 border-b lg:w-1/4"></span>
 
         <p class="text-xs text-center text-gray-500 uppercase">or login with email</p>
@@ -25,13 +25,13 @@
         <span class="w-1/5 border-b lg:w-1/4"></span>
       </div>
 
-      <div class="mt-6">
+      <div class="mt-8">
         <label class="block mb-2 text-sm font-medium text-gray-600" for="email">Email Address</label>
         <input id="email" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md
                focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="email">
       </div>
 
-      <div class="mt-5">
+      <div class="mt-6">
         <div class="flex justify-between">
           <label class="block mb-2 text-sm font-medium text-gray-600" for="password">Password</label>
           <a href="#" class="text-xs text-gray-500 transition ease-in-out hover:text-gray-800">Forget Password?</a>

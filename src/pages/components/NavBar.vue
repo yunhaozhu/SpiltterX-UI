@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white mx-6 my-4 shadow-card rounded-md">
+  <div class="bg-white mx-7 my-4 shadow-card rounded-md">
     <div class="flex h-14 p-4 items-center justify-between text-gray-500">
       <div class="flex space-x-3">
         <svg class="w-6 h-6 stroke-current stroke-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

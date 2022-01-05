@@ -1,4 +1,4 @@
-<template class="bg-gray-50">
+<template>
   <router-view/>
 </template>
 
