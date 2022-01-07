@@ -11,7 +11,6 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Dashboard',
     component: Dashboard,
     meta: {
       title: 'SplitterX',

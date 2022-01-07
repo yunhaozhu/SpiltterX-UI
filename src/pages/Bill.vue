@@ -1,69 +1,74 @@
 <template>
   <div class="flex mx-7 my-3 space-x-12">
     <!-- items -->
+
     <div class="w-3/5 ml-2">
       <div class="mt-2 mb-6 text-2xl text-gray-600">
         <h2>Group Expanses</h2>
       </div>
-      <div class="flex-col bg-white rounded-lg shadow-card justify-center">
-        <div class="flex justify-between mx-6 pt-8">
-          <div class="flex relative h-10">
-            <div class="absolute flex items-center z-10 pl-2.5 pr-2 h-full text-gray-500 border-r border-gray-300">
-              <svg class="w-6 h-6 stroke-current stroke-2" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <circle cx="12" cy="7" r="4" />
-                <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-              </svg>
-            </div>
-            <input type="text" id="people"
-                   class="relative rounded-md appearance-none border border-gray-300 w-full py-2 pl-14 text-gray-700 placeholder-gray-400 shadow-sm text-base
+      <div v-for="member in members" :key="member.memberId">
+        <div class="flex-col bg-white rounded-lg shadow-card justify-center mb-10">
+          <div class="flex justify-between mx-6 pt-8">
+            <div class="flex relative h-10">
+              <div class="absolute flex items-center z-10 pl-2.5 pr-2 h-full text-gray-500 border-r border-gray-300">
+                <svg class="w-6 h-6 stroke-current stroke-2" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <circle cx="12" cy="7" r="4" />
+                  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                </svg>
+              </div>
+              <input type="text" id="people" v-model="member.memberName"
+                     class="relative rounded-md appearance-none border border-gray-300 w-full py-2 pl-14 text-gray-700 placeholder-gray-400 shadow-sm text-base
                        focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                   placeholder="Member 1"/>
-          </div>
-          <div class="flex text-md text-gray-500 justify-center mt-1 mr-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="mr-1 w-6 h-6 stroke-current stroke-2" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-              <circle cx="12" cy="12" r="9" />
-              <path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4h-2a2 2 0 0 1 -1.8 -1" />
-              <path d="M12 6v2m0 8v2" />
-            </svg>
-            <h3>Total: 28.7$</h3>
-          </div>
-        </div>
-        <!-- Repeating Form -->
-        <div class="flex-col px-3 py-8 md:px-6">
-          <div class="flex space-x-3">
-            <div class="w-2/5">
-              <p class="block mb-2 text-sm text-gray-500">Item Name</p>
+                     placeholder="Member Name"/>
             </div>
-            <div class="w-1/5">
-              <p class="block mb-2 text-sm text-gray-500">Cost</p>
-            </div>
-            <div class="w-1/5">
-              <p class="block mb-2 text-sm text-gray-500">Quantity</p>
-            </div>
-            <div class="w-1/5 pl-3">
-              <p class="pl-1 block mb-2 text-sm text-gray-500">Actions</p>
+            <div class="flex text-md text-gray-500 justify-center mt-1 mr-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="mr-1 w-6 h-6 stroke-current stroke-2" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <circle cx="12" cy="12" r="9" />
+                <path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4h-2a2 2 0 0 1 -1.8 -1" />
+                <path d="M12 6v2m0 8v2" />
+              </svg>
+              <p>Total: {{totals[member.memberId]}}$</p>
             </div>
           </div>
-          <div v-for="item in members[0].items" :key="item.id" class="">
-            <div class="flex space-x-3 text-sm text-gray-600 mb-3">
+          <!-- Repeating Form -->
+          <div class="flex-col px-3 py-8 md:px-6">
+            <div class="flex space-x-3">
+              <div class="w-2/5">
+                <p class="block mb-2 text-sm text-gray-500">Item Name</p>
+              </div>
+              <div class="w-1/5">
+                <p class="block mb-2 text-sm text-gray-500">Cost</p>
+              </div>
+              <div class="w-1/5">
+                <p class="block mb-2 text-sm text-gray-500">Quantity</p>
+              </div>
+              <div class="w-1/5 pl-3">
+                <p class="pl-1 block mb-2 text-sm text-gray-500">Actions</p>
+              </div>
+            </div>
+            <div v-for="item in member.items" :key="item.id" class="">
+              <div class="flex space-x-3 text-sm text-gray-600 mb-3">
                 <div class="w-2/5">
-                  <input id="item-name" v-model="item.name" class="block w-full px-4 py-1.5 bg-white border rounded-md
+                  <input id="item-name" v-model="item.itemName" class="block w-full px-4 py-1.5 bg-white border rounded-md
                focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text">
                 </div>
                 <div class="w-1/5">
-                  <input id="cost" v-model="item.cost" class="block w-full px-4 py-1.5 bg-white border rounded-md
-               focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text">
+                  <input id="cost" v-model="item.cost" @blur="updateTotal(member.memberId)"
+                         class="block w-full px-4 py-1.5 bg-white border rounded-md focus:outline-none
+                         focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text">
                 </div>
                 <div class="w-1/5">
-                  <input id="quantity" v-model="item.quantity" class="block w-full px-4 py-1.5 bg-white border rounded-md
-               focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text">
+                  <input id="quantity" v-model="item.quantity" @blur="updateTotal(member.memberId)"
+                         class="block w-full px-4 py-1.5 bg-white border rounded-md focus:outline-none
+                         focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text">
                 </div>
                 <div class="w-1/5 pl-3">
                   <div class="flex">
                     <div class="pl-0.5 pt-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current text-gray-600" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current text-gray-600" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                         <circle cx="9" cy="7" r="4" />
                         <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
                         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
@@ -83,22 +88,21 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <div class="flex mt-6">
+              <span class="w-full border-b"></span>
+            </div>
+            <div class="mt-3 w-32">
+              <button @click="addItem(member.memberId)"
+                      class="py-2 text-white tracking-wide bg-purple-600 hover:bg-purple-700 w-full transition ease-in duration-200 text-center text-base shadow-md rounded-lg">
+                Add More +
+              </button>
+            </div>
           </div>
-
-          <div class="flex mt-6">
-            <span class="w-full border-b"></span>
-          </div>
-
-          <div class="mt-3 w-32">
-            <button @click="addItem"
-                    class="py-2 text-white tracking-wide bg-purple-600 hover:bg-purple-700 w-full transition ease-in duration-200 text-center text-base shadow-md rounded-lg">
-              Add More +
-            </button>
-          </div>
-
         </div>
       </div>
     </div>
+
     <!-- result column-->
     <div class="w-1/3">
       <div class="sticky top-6">
@@ -123,11 +127,11 @@
           </div>
           <div class="flex justify-center text-gray-600 pt-2 pb-8">
             <div class="flex space-x-2">
-              <button @click="addItem"
+              <button @click="removeMember"
                       class="py-2 w-10 h-11 text-white text-xl bg-purple-600 hover:bg-purple-700 transition ease-in duration-200 text-center text-base shadow-md rounded-md">-
               </button>
-              <div class="flex w-28 border-2 h-11 rounded-md focus-within:ring-2 focus-within:ring-purple-600 focus-within:border-transparent">
-                <div class="w-32 border-r-2">
+              <div class="flex w-24 border-2 h-11 rounded-md focus-within:ring-2 focus-within:ring-purple-600 focus-within:border-transparent">
+                <div class="w-12 border-r-2">
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 ml-2.5 mt-2 stroke-current" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                     <circle cx="9" cy="7" r="4" />
@@ -136,22 +140,22 @@
                     <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
                   </svg>
                 </div>
-                <input id="members" class="block w-full mx-3 text-xl outline-none" type="text" v-model="memberCount">
+                <span v-text="memberCount" class="w-12 pl-3 pt-1.5 text-xl"></span>
               </div>
-              <button @click="addItem"
+              <button @click="addMember(1)"
                       class="py-2 w-10 h-11 text-white text-xl bg-purple-600 hover:bg-purple-700 transition ease-in duration-200 text-center text-base shadow-md rounded-md">+
               </button>
             </div>
           </div>
           <div class="flex justify-center mt-18">
-            <button @click="addItem"
+            <button @click="submitBill"
                     class="py-2 w-full h-11 text-white text-lg font-light tracking-wide bg-purple-600 hover:bg-purple-700
                   transition ease-in duration-200 text-center text-base shadow-md rounded-b-md">
               Show results
             </button>
           </div>
         </div>
-        <div class="flex-col bg-white rounded-lg shadow-card justify-center mt-12">
+        <div class="flex-col bg-white rounded-lg shadow-card justify-center mt-10">
           <div class="flex justify-center pt-5 pb-3 text-lg text-gray-600" v-show="true">
             <h2>Who pays who how much:</h2>
           </div>
@@ -169,24 +173,80 @@ export default {
     return {
       billName: "Someone's Bill Group",
       memberCount: 2,
+      totals: [0, 0],
       members: [{
-        id: 1,
-        total: 0,
+        memberId: 0,
+        memberName: "",
         nextItem: 1,
         items: [{
-          id: 1,
-          name: "xxx",
-          cost: 9.72,
-          quantity: 1,
-        }]
-      }]
+          itemId: 0,
+          itemName: "",
+          cost: null,
+          quantity: null,
+          share: [0,1]}]
+      },
+        {
+          memberId: 1,
+          memberName: "",
+          nextItem: 0,
+          items: [{
+            itemId: 1,
+            itemName: "",
+            cost: null,
+            quantity: null,
+            share: [1]}]
+        }],
     }
   },
   methods: {
-    addItem() {
-      this.members[0].items.push({
-        id: this.members[0].nextItem += this.members[0].nextItem
+    addItem(memberId) {
+      this.members[memberId].items.push({
+        id: this.members[0].nextItem
       })
+      this.members[0].nextItem = this.members[0].nextItem + 1
+    },
+    updateTotal(memberId) {
+      let sum = 0;
+      for (let item of this.members[memberId].items) {
+        if (item.cost != null && item.quantity != null) {
+          sum = sum + item.cost * item.quantity;
+        }
+      }
+      sum = sum.toFixed(2)
+      this.$set(this.totals, memberId, sum)
+    },
+    submitBill() {
+      let submitData = {
+        billName: this.billName,
+        memberCount: this.memberCount,
+        members: this.members,
+      }
+      this.$axios.post('/split', submitData)
+    },
+    addMember(count) {
+      for (let i = 0; i < count; i++) {
+        this.members.push({
+          memberId: this.memberCount,
+          memberName: "",
+          nextItem: 0,
+          items: [{
+            itemId: 0,
+            itemName: "",
+            cost: null,
+            quantity: null,
+            share: [1]}]
+        })
+        this.totals[this.memberCount] = 0;
+        this.updateTotal(this.memberCount);
+        this.memberCount = this.memberCount + 1;
+      }
+    },
+    removeMember() {
+      if(this.memberCount > 1) {
+        this.totals.pop()
+        this.memberCount = this.memberCount - 1;
+        this.members.pop();
+      }
     }
   }
 }
