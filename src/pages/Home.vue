@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white h-full mx-7 my-3 shadow-card rounded-md font-display">
+  <div class="bg-white mx-7 my-3 h-screen shadow-card rounded-md font-display">
     <div class="px-8 py-12 w-full mx-auto lg:px-12 2xl:w-10/12">
       <!-- banner -->
       <div class="mb-20 w-full sm:text-center">
@@ -64,7 +64,7 @@
         </div>
       </div>
       <!-- Steps -->
-      <div class="mt-16 pt-6 grid gap-16 lg:grid-cols-3 font-sans">
+      <div class="mb-8 pt-8 grid gap-16 lg:grid-cols-3 font-sans">
         <div class="relative text-center">
           <div class="flex items-center justify-center w-16 h-16 pr-0.5 mx-auto mb-4 rounded-full bg-indigo-50 text-purple-700 sm:w-20 sm:h-20">
             <svg class="w-11 h-11 stroke-current" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">

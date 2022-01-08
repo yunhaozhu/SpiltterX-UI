@@ -1,5 +1,5 @@
 <template>
-  <div class="flex mx-7 my-3 pt-16 h-full overflow-hidden bg-white rounded-lg shadow-card justify-center">
+  <div class="flex mx-7 my-3 pt-16 h-screen overflow-hidden bg-white rounded-lg shadow-card justify-center">
     <div class="flex-grow max-w-md px-6 py-8 md:px-8">
       <h1 class="mb-5 text-4xl font-bold text-center text-purple-700">SplitterX</h1>
 

@@ -1,7 +1,6 @@
 <template>
   <div class="flex mx-7 my-3 space-x-12">
     <!-- items -->
-
     <div class="w-3/5 ml-2">
       <div class="mt-2 mb-6 text-2xl text-gray-600">
         <h2>Group Expanses</h2>
@@ -48,7 +47,7 @@
                 <p class="pl-1 block mb-2 text-sm text-gray-500">Actions</p>
               </div>
             </div>
-            <div v-for="item in member.items" :key="item.id" class="">
+            <div v-for="(item, itemIndex) in member.items" :key="item.id" class="">
               <div class="flex space-x-3 text-sm text-gray-600 mb-3">
                 <div class="w-2/5">
                   <input id="item-name" v-model="item.itemName" class="block w-full px-4 py-1.5 bg-white border rounded-md
@@ -75,7 +74,7 @@
                         <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
                       </svg>
                     </div>
-                    <div class="pt-1 pl-3">
+                    <div class="pt-1 pl-3 cursor-pointer" @click="removeItem(member.memberId, itemIndex)">
                       <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current text-red-500" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                         <line x1="4" y1="7" x2="20" y2="7" />
@@ -199,11 +198,13 @@ export default {
     }
   },
   methods: {
-    addItem(memberId) {
-      this.members[memberId].items.push({
-        id: this.members[0].nextItem
-      })
-      this.members[0].nextItem = this.members[0].nextItem + 1
+    submitBill() {
+      let submitData = {
+        billName: this.billName,
+        memberCount: this.memberCount,
+        members: this.members,
+      }
+      this.$axios.post('/split', submitData)
     },
     updateTotal(memberId) {
       let sum = 0;
@@ -215,13 +216,14 @@ export default {
       sum = sum.toFixed(2)
       this.$set(this.totals, memberId, sum)
     },
-    submitBill() {
-      let submitData = {
-        billName: this.billName,
-        memberCount: this.memberCount,
-        members: this.members,
-      }
-      this.$axios.post('/split', submitData)
+    addItem(memberId) {
+      this.members[memberId].items.push({
+        itemId: this.members[0].nextItem
+      })
+      this.members[0].nextItem = this.members[0].nextItem + 1
+    },
+    removeItem(memberId, itemIndex){
+      this.members[memberId].items.splice(itemIndex, 1);
     },
     addMember(count) {
       for (let i = 0; i < count; i++) {
@@ -253,5 +255,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
