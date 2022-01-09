@@ -66,12 +66,12 @@
                 <div class="w-1/5 pl-3">
                   <div class="flex">
                     <ShareDropdown>
-                      <div class="flex flex-col m-2.5 w-28">
-                        <p class="mt-1 mb-2.5">Who share this?</p>
+                      <div class="flex flex-col mx-3 my-2 w-28">
+                        <p class="mt-2 mb-3">Who share this?</p>
                         <div v-for="m in members" :key="m.memberId">
-                          <div class="flex items-center mb-4 cursor-pointer">
-                            <input :id="m.memberId" type="checkbox" class="text-purple-600 cursor-pointer" v-model="item.share[m.memberId]">
-                            <label :for="m.memberId" class="ml-2.5 text-sm font-medium overflow-clip cursor-pointer">{{ m.memberName }}</label>
+                          <div class="flex items-center mb-2.5 cursor-pointer">
+                            <input :id="member.memberId+'share'+itemIndex+m.memberId" type="checkbox" class="form-checkbox text-purple-600 focus:ring-white rounded cursor-pointer" v-model="item.share[m.memberId]"/>
+                            <label :for="member.memberId+'share'+itemIndex+m.memberId" class="ml-2 text-sm font-medium truncate select-none cursor-pointer">{{ m.memberName }}</label>
                           </div>
                         </div>
                       </div>
@@ -103,7 +103,6 @@
         </div>
       </div>
     </div>
-
     <!-- result column-->
     <div class="w-1/3">
       <div class="sticky top-6">
@@ -156,19 +155,34 @@
             </button>
           </div>
         </div>
-        <div class="flex-col bg-white rounded-lg shadow-card justify-center mt-10">
-          <div class="flex justify-center pt-5 pb-3 text-lg text-gray-600" v-show="true">
-            <h2>Who pays who how much:</h2>
+        <div class="bg-white rounded-lg shadow-card justify-center mt-10" v-show="true">
+          <div class="flex flex-col pt-7 pb-2 text-lg text-gray-600">
+            <div class="flex justify-center mb-5">
+              <h2>Who pays who how much:</h2>
+            </div>
+            <div class="flex flex-col mx-6 px-6 mb-6 text-base">
+              <div v-for="(result, id) in results" :key="id"
+                   class="flex justify-between items-center px-6 h-11 border-t-2 border-r-2 border-l-2 last:border-b-2">
+                <span v-text="result.memberA" class="truncate"></span>
+                <div class="flex items-center pl-3">
+                  <div class="w-20 bg-purple-500 text-white text-center">
+                    <span v-text="result.amount"></span>
+                  </div>
+                  <div class="w-6 h-6 bg-purple-500 text-white text-center transform rotate-45 scale-75 -translate-x-3"></div>
+                </div>
+                <span v-text="result.memberB" class="truncate">Name 2</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
 import ShareDropdown from "@/pages/components/ShareDropdown";
+
 export default {
   name: "Bill",
   components: {ShareDropdown},
@@ -177,6 +191,7 @@ export default {
       billName: "Someone's Bill Group",
       memberCount: 1,
       totals: [0, 0],
+      results: [],
       members: [{
         memberId: 0,
         memberName: "Name 1",
@@ -185,8 +200,8 @@ export default {
           itemId: 0,
           itemName: "",
           cost: null,
-          quantity: null,
-          share: [true,true]}]
+          quantity: 1,
+          share: []}]
       }],
     }
   },
@@ -201,13 +216,15 @@ export default {
         memberCount: this.memberCount,
         members: this.members,
       }
-      this.$axios.post('/split', submitData)
+      const _this = this
+      this.$axios.post('/split', submitData).then(res => {
+        _this.results = res.data.data.splitResult})
     },
     updateTotal(memberId) {
       let sum = 0;
       for (let item of this.members[memberId].items) {
         if (item.cost != null && item.quantity != null) {
-          sum = sum + item.cost * item.quantity;
+          sum = sum + item.cost * item.quantity
         }
       }
       sum = sum.toFixed(2)
@@ -215,16 +232,19 @@ export default {
     },
     addItem(memberId) {
       this.members[memberId].items.push({
-        itemId: this.members[0].nextItem,
+        itemId: this.members[memberId].nextItem,
         itemName: "",
         cost: null,
-        quantity: null,
+        quantity: 1,
         share: [true,true],
       })
-      this.members[0].nextItem = this.members[0].nextItem + 1
+      for (let i = 2; i < this.memberCount; i++) {
+        this.members[memberId].items.at(-1).share.push(true)
+      }
+      this.members[memberId].nextItem = this.members[memberId].nextItem + 1
     },
     removeItem(memberId, itemIndex){
-      this.members[memberId].items.splice(itemIndex, 1);
+      this.members[memberId].items.splice(itemIndex, 1)
     },
     addMember(count) {
       for (let i = 0; i < count; i++) {
@@ -236,19 +256,31 @@ export default {
             itemId: 0,
             itemName: "",
             cost: null,
-            quantity: null,
-            share: [true, true]}]
+            quantity: 1,
+            share: []}]
         })
-        this.totals[this.memberCount] = 0;
-        this.updateTotal(this.memberCount);
-        this.memberCount = this.memberCount + 1;
+        this.totals[this.memberCount] = 0
+        this.updateTotal(this.memberCount)
+        this.memberCount = this.memberCount + 1
+      }
+      for (let member of this.members) {
+        for (let item of member.items) {
+          for (let i = item.share.length; i < this.memberCount; i++) {
+            item.share.push(true)
+          }
+        }
       }
     },
     removeMember() {
       if(this.memberCount > 2) {
         this.totals.pop()
-        this.memberCount = this.memberCount - 1;
+        this.memberCount = this.memberCount - 1
         this.members.pop();
+        for (let member of this.members) {
+          for (let item of member.items) {
+            item.share.pop()
+          }
+        }
       }
     }
   }

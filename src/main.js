@@ -5,6 +5,8 @@ import store from './store'
 import './assets/tailwind.css'
 import axios from "./axios";
 
+Vue.prototype.$axios = axios
+
 Vue.config.productionTip = false
 
 router.beforeEach((to,from,next) =>{
