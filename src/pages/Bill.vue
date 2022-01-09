@@ -65,15 +65,17 @@
                 </div>
                 <div class="w-1/5 pl-3">
                   <div class="flex">
-                    <div class="pl-0.5 pt-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current text-gray-600" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
-                      </svg>
-                    </div>
+                    <ShareDropdown>
+                      <div class="flex flex-col m-2.5 w-28">
+                        <p class="mt-1 mb-2.5">Who share this?</p>
+                        <div v-for="m in members" :key="m.memberId">
+                          <div class="flex items-center mb-4 cursor-pointer">
+                            <input :id="m.memberId" type="checkbox" class="text-purple-600 cursor-pointer" v-model="item.share[m.memberId]">
+                            <label :for="m.memberId" class="ml-2.5 text-sm font-medium overflow-clip cursor-pointer">{{ m.memberName }}</label>
+                          </div>
+                        </div>
+                      </div>
+                    </ShareDropdown>
                     <div class="pt-1 pl-3 cursor-pointer" @click="removeItem(member.memberId, itemIndex)">
                       <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current text-red-500" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -166,36 +168,31 @@
 </template>
 
 <script>
+import ShareDropdown from "@/pages/components/ShareDropdown";
 export default {
   name: "Bill",
+  components: {ShareDropdown},
   data() {
     return {
       billName: "Someone's Bill Group",
-      memberCount: 2,
+      memberCount: 1,
       totals: [0, 0],
       members: [{
         memberId: 0,
-        memberName: "",
+        memberName: "Name 1",
         nextItem: 1,
         items: [{
           itemId: 0,
           itemName: "",
           cost: null,
           quantity: null,
-          share: [0,1]}]
-      },
-        {
-          memberId: 1,
-          memberName: "",
-          nextItem: 0,
-          items: [{
-            itemId: 1,
-            itemName: "",
-            cost: null,
-            quantity: null,
-            share: [1]}]
-        }],
+          share: [true,true]}]
+      }],
     }
+  },
+  mounted() {
+    this.updateTotal(0);
+    this.addMember(1)
   },
   methods: {
     submitBill() {
@@ -218,7 +215,11 @@ export default {
     },
     addItem(memberId) {
       this.members[memberId].items.push({
-        itemId: this.members[0].nextItem
+        itemId: this.members[0].nextItem,
+        itemName: "",
+        cost: null,
+        quantity: null,
+        share: [true,true],
       })
       this.members[0].nextItem = this.members[0].nextItem + 1
     },
@@ -229,14 +230,14 @@ export default {
       for (let i = 0; i < count; i++) {
         this.members.push({
           memberId: this.memberCount,
-          memberName: "",
+          memberName: "Name " + (this.memberCount+1),
           nextItem: 0,
           items: [{
             itemId: 0,
             itemName: "",
             cost: null,
             quantity: null,
-            share: [1]}]
+            share: [true, true]}]
         })
         this.totals[this.memberCount] = 0;
         this.updateTotal(this.memberCount);
@@ -244,7 +245,7 @@ export default {
       }
     },
     removeMember() {
-      if(this.memberCount > 1) {
+      if(this.memberCount > 2) {
         this.totals.pop()
         this.memberCount = this.memberCount - 1;
         this.members.pop();
