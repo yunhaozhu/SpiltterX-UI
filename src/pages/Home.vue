@@ -18,7 +18,7 @@
       <!-- Starting form -->
       <div class="flex flex-col max-w-2xl mx-auto my-20 py-8 bg-white rounded-lg shadow-card sm:px-6 md:px-8 lg:px-10">
         <div class="mt-8">
-          <form action="/bill" autocomplete="off">
+          <form autocomplete="off">
             <div class="flex flex-col mb-6">
               <div class="flex relative">
                 <div class="absolute flex items-center z-10 pl-3 pr-2.5 h-full text-gray-500 border-r border-gray-300">
@@ -28,7 +28,7 @@
                     </path>
                   </svg>
                 </div>
-                <input type="text" id="title"
+                <input type="text" id="title" v-model="billName"
                        class="relative flex-1 rounded-md appearance-none border border-gray-300 w-full py-2 pl-14 pr-4 text-gray-700 placeholder-gray-400 shadow-sm text-base
                        focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                        placeholder="Give your bill a name"/>
@@ -43,14 +43,14 @@
                     </path>
                   </svg>
                 </div>
-                <input type="text" id="people"
+                <input type="text" id="people" v-model="memberCount"
                        class="relative flex-1 rounded-md appearance-none border border-gray-300 w-full py-2 pl-14 pr-4 text-gray-700 placeholder-gray-400 shadow-sm text-base
                        focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                        placeholder="How many people are in your group?"/>
               </div>
             </div>
             <div class="flex w-full h-11">
-              <button type="submit"
+              <button type="submit" @click.prevent="startSplit"
                       class="py-2 px-4 bg-purple-600 hover:bg-purple-700 focus:ring-purple-500 focus:ring-offset-purple-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg">
                 Start your split now!
               </button>
@@ -133,7 +133,20 @@
 
 <script>
 export default {
-  name: "Home"
+  name: "Home",
+  data() {
+    return {
+      memberCount: null,
+      billName: '',
+    }
+  },
+  methods: {
+    startSplit() {
+      this.$store.commit('setInitialBillName', this.billName)
+      this.$store.commit('setInitialMember', this.memberCount)
+      this.$router.push('/bill')
+    }
+  }
 }
 </script>
 

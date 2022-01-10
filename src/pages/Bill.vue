@@ -155,7 +155,7 @@
             </button>
           </div>
         </div>
-        <div class="bg-white rounded-lg shadow-card justify-center mt-10" v-show="true">
+        <div class="bg-white rounded-lg shadow-card justify-center mt-10" v-show="resultsOpen">
           <div class="flex flex-col pt-7 pb-2 text-lg text-gray-600">
             <div class="flex justify-center mb-5">
               <h2>Who pays who how much:</h2>
@@ -182,6 +182,7 @@
 
 <script>
 import ShareDropdown from "@/pages/components/ShareDropdown";
+import {mapState} from "vuex";
 
 export default {
   name: "Bill",
@@ -190,6 +191,7 @@ export default {
     return {
       billName: "Someone's Bill Group",
       memberCount: 1,
+      resultsOpen: false,
       totals: [0, 0],
       results: [],
       members: [{
@@ -206,9 +208,13 @@ export default {
       }],
     }
   },
+  computed: {
+    ...mapState(['initialBillName','initialMember'])
+  },
   mounted() {
-    this.updateTotal(0);
-    this.addMember(1)
+    this.updateTotal(0)
+    this.billName = this.initialBillName
+    this.addMember(this.initialMember - 1)
   },
   methods: {
     submitBill() {
@@ -220,6 +226,7 @@ export default {
       const _this = this
       this.$axios.post('/split', submitData).then(res => {
         _this.results = res.data.data.splitResult})
+      this.resultsOpen = true;
     },
     updateTotal(memberId) {
       let sum = 0;
@@ -230,6 +237,7 @@ export default {
       }
       sum = sum.toFixed(2)
       this.$set(this.totals, memberId, sum)
+      this.resultsOpen = false
     },
     checkShare(memberId, itemIndex) {
       let active = false;
@@ -237,6 +245,7 @@ export default {
         if (share !== true) active = true
       }
       this.members[memberId].items[itemIndex].shareActive = active
+      this.resultsOpen = false
     },
     addItem(memberId) {
       this.members[memberId].items.push({
