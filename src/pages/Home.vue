@@ -18,44 +18,50 @@
       <!-- Starting form -->
       <div class="flex flex-col max-w-2xl mx-auto my-20 py-8 bg-white rounded-lg shadow-card sm:px-6 md:px-8 lg:px-10">
         <div class="mt-8">
-          <form autocomplete="off">
-            <div class="flex flex-col mb-6">
-              <div class="flex relative">
-                <div class="absolute flex items-center z-10 pl-3 pr-2.5 h-full text-gray-500 border-r border-gray-300">
-                  <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                    </path>
-                  </svg>
+          <validation-observer ref="initialRules">
+            <validation-provider rules="required" v-slot="{ errors, failed }">
+              <div class="flex flex-col mb-4">
+                <div class="flex relative">
+                  <div class="absolute flex items-center z-10 pl-3 pr-2.5 h-full text-gray-500 border-r border-gray-300">
+                    <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                      </path>
+                    </svg>
+                  </div>
+                  <input type="text" id="title" v-model="billName"  :class="failed ? 'ring-2 ring-red-500' : 'border border-gray-300'"
+                         class="relative flex-1 rounded-md appearance-none w-full py-2 pl-14 pr-4 text-gray-700 placeholder-gray-400 shadow-sm text-base
+                   focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                         placeholder="Give your bill a name"/>
                 </div>
-                <input type="text" id="title" v-model="billName"
-                       class="relative flex-1 rounded-md appearance-none border border-gray-300 w-full py-2 pl-14 pr-4 text-gray-700 placeholder-gray-400 shadow-sm text-base
-                       focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                       placeholder="Give your bill a name"/>
+                <span class="text-sm text-red-500 pt-2 text-right">{{ errors[0] }}</span>
               </div>
-            </div>
-            <div class="flex flex-col mb-8">
-              <div class="flex relative">
-                <div class="absolute flex items-center z-10 pl-3 pr-2.5 h-full text-gray-500 border-r border-gray-300">
-                  <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                    </path>
-                  </svg>
+            </validation-provider>
+            <validation-provider rules="required|member" v-slot="{ errors, failed }">
+              <div class="flex flex-col mb-6">
+                <div class="flex relative">
+                  <div class="absolute flex items-center z-10 pl-3 pr-2.5 h-full text-gray-500 border-r border-gray-300">
+                    <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                      </path>
+                    </svg>
+                  </div>
+                  <input type="text" id="people" v-model="memberCount"  :class="failed ? 'ring-2 ring-red-500' : 'border border-gray-300'"
+                         class="relative flex-1 rounded-md appearance-none w-full py-2 pl-14 pr-4 text-gray-700 placeholder-gray-400 shadow-sm text-base
+                   focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                         placeholder="How many people are in your group?"/>
                 </div>
-                <input type="text" id="people" v-model="memberCount"
-                       class="relative flex-1 rounded-md appearance-none border border-gray-300 w-full py-2 pl-14 pr-4 text-gray-700 placeholder-gray-400 shadow-sm text-base
-                       focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                       placeholder="How many people are in your group?"/>
+                <span class="text-sm text-red-500 pt-2 text-right">{{ errors[0] }}</span>
               </div>
-            </div>
+            </validation-provider>
             <div class="flex w-full h-11">
-              <button type="submit" @click.prevent="startSplit"
+              <button type="button" @click="startSplit"
                       class="py-2 px-4 bg-purple-600 hover:bg-purple-700 focus:ring-purple-500 focus:ring-offset-purple-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg">
                 Start your split now!
               </button>
             </div>
-          </form>
+          </validation-observer>
         </div>
         <div class="flex items-center justify-center mt-4 mb-3">
           <a href="#" target="_blank" class="inline-flex items-center text-sm font-thin text-center text-gray-500 hover:text-gray-700">
@@ -132,19 +138,32 @@
 </template>
 
 <script>
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
+import { memberRule, requiredRule} from "@/validation";
+
 export default {
   name: "Home",
+  components: {
+    ValidationProvider,
+    ValidationObserver,
+  },
   data() {
     return {
       memberCount: null,
       billName: '',
+      memberRule,
+      requiredRule
     }
   },
   methods: {
     startSplit() {
-      this.$store.commit('setInitialBillName', this.billName)
-      this.$store.commit('setInitialMember', this.memberCount)
-      this.$router.push('/bill')
+      this.$refs.initialRules.validate().then(success => {
+        if (success) {
+          this.$store.commit('setInitialBillName', this.billName)
+          this.$store.commit('setInitialMember', this.memberCount)
+          this.$router.push('/bill')
+        }
+      })
     }
   }
 }
