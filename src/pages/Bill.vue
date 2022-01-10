@@ -65,7 +65,7 @@
                 </div>
                 <div class="w-1/5 pl-3">
                   <div class="flex">
-                    <ShareDropdown>
+                    <ShareDropdown :shareActive="item.shareActive" @dropdownClose="checkShare(member.memberId, itemIndex)">
                       <div class="flex flex-col mx-3 my-2 w-28">
                         <p class="mt-2 mb-3">Who share this?</p>
                         <div v-for="m in members" :key="m.memberId">
@@ -201,7 +201,8 @@ export default {
           itemName: "",
           cost: null,
           quantity: 1,
-          share: []}]
+          share: [],
+          shareActive: false}]
       }],
     }
   },
@@ -230,6 +231,13 @@ export default {
       sum = sum.toFixed(2)
       this.$set(this.totals, memberId, sum)
     },
+    checkShare(memberId, itemIndex) {
+      let active = false;
+      for (let share of this.members[memberId].items[itemIndex].share) {
+        if (share !== true) active = true
+      }
+      this.members[memberId].items[itemIndex].shareActive = active
+    },
     addItem(memberId) {
       this.members[memberId].items.push({
         itemId: this.members[memberId].nextItem,
@@ -237,6 +245,7 @@ export default {
         cost: null,
         quantity: 1,
         share: [true,true],
+        shareActive: false
       })
       for (let i = 2; i < this.memberCount; i++) {
         this.members[memberId].items.at(-1).share.push(true)
@@ -257,7 +266,8 @@ export default {
             itemName: "",
             cost: null,
             quantity: 1,
-            share: []}]
+            share: [],
+            shareActive: false}]
         })
         this.totals[this.memberCount] = 0
         this.updateTotal(this.memberCount)

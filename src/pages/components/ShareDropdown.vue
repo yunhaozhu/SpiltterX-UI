@@ -1,7 +1,8 @@
 <template>
   <div class="relative inline-flex">
     <button ref="trigger" class="pl-0.5 pt-1" @click.prevent="dropdownOpen = !dropdownOpen">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current text-gray-600" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current" :class="shareActive ? 'text-purple-700' : 'text-gray-600'"
+           viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
         <circle cx="9" cy="7" r="4" />
         <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
@@ -27,6 +28,7 @@
 <script>
 export default {
   name: "ShareDropdown",
+  props: ['shareActive'],
   data() {
     return {
       dropdownOpen : false,
@@ -39,6 +41,7 @@ export default {
       if(!this.dropdownOpen || dropRef.contains(target) || triggerRef.contains(target))
         return;
       this.dropdownOpen = false;
+      this.$emit("dropdownClose")
     }
   },
   mounted() {
