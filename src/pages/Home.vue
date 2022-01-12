@@ -19,7 +19,7 @@
       <div class="flex flex-col max-w-2xl mx-auto my-20 py-8 bg-white rounded-lg shadow-card sm:px-6 md:px-8 lg:px-10">
         <div class="mt-8">
           <validation-observer ref="initialRules">
-            <validation-provider rules="required" v-slot="{ errors, failed }">
+            <validation-provider name="Bill name" rules="required|max:50" v-slot="{ errors, failed }">
               <div class="flex flex-col mb-4">
                 <div class="flex relative">
                   <div class="absolute flex items-center z-10 pl-3 pr-2.5 h-full text-gray-500 border-r border-gray-300">
@@ -37,7 +37,7 @@
                 <span class="text-sm text-red-500 pt-2 text-right">{{ errors[0] }}</span>
               </div>
             </validation-provider>
-            <validation-provider rules="required|member" v-slot="{ errors, failed }">
+            <validation-provider rules="integer|member" v-slot="{ errors, failed }">
               <div class="flex flex-col mb-6">
                 <div class="flex relative">
                   <div class="absolute flex items-center z-10 pl-3 pr-2.5 h-full text-gray-500 border-r border-gray-300">
@@ -47,7 +47,7 @@
                       </path>
                     </svg>
                   </div>
-                  <input type="text" id="people" v-model="memberCount"  :class="failed ? 'ring-2 ring-red-500' : 'border border-gray-300'"
+                  <input type="number" id="people" v-model.number="memberCount"  :class="failed ? 'ring-2 ring-red-500' : 'border border-gray-300'"
                          class="relative flex-1 rounded-md appearance-none w-full py-2 pl-14 pr-4 text-gray-700 placeholder-gray-400 shadow-sm text-base
                    focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                          placeholder="How many people are in your group?"/>
@@ -139,7 +139,7 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
-import { memberRule, requiredRule} from "@/validation";
+import { memberRule, requiredRule, maxRule, integerRule } from "@/validation";
 
 export default {
   name: "Home",
@@ -152,13 +152,18 @@ export default {
       memberCount: null,
       billName: '',
       memberRule,
-      requiredRule
+      requiredRule,
+      maxRule,
+      integerRule
     }
   },
   methods: {
     startSplit() {
       this.$refs.initialRules.validate().then(success => {
         if (success) {
+          if (this.memberCount == null) {
+            this.memberCount = 2
+          }
           this.$store.commit('setInitialBillName', this.billName)
           this.$store.commit('setInitialMember', this.memberCount)
           this.$router.push('/bill')
