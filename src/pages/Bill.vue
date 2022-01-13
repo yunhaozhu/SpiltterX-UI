@@ -9,7 +9,7 @@
         <div v-for="member in members" :key="member.memberId">
           <div class="flex-col bg-white rounded-lg shadow-card justify-center mb-10">
             <div class="flex justify-between mx-6 pt-8">
-              <validation-provider class="flex flex-col" name="Name" rules="required|max:30" v-slot="{ errors, failed }" :vid="member.memberId">
+              <validation-provider class="flex flex-col" name="Name" rules="required|max:30" v-slot="{ errors, failed }" :vid="'member'+member.memberId">
                 <div class="flex relative h-10">
                   <div class="absolute flex items-center z-10 pl-2.5 pr-2 h-full text-gray-500 border-r border-gray-300">
                     <svg class="w-6 h-6 stroke-current stroke-2" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -210,6 +210,7 @@ export default {
       requiredRule,
       maxRule,
       minValueRule,
+      billId: "",
       billName: "Someone's Bill Group",
       memberCount: 1,
       resultsOpen: false,
@@ -232,11 +233,6 @@ export default {
   computed: {
     ...mapState(['initialBillName','initialMember'])
   },
-  mounted() {
-    this.updateTotal(0)
-    this.billName = this.initialBillName
-    this.addMember(this.initialMember - 1)
-  },
   methods: {
     submitBill() {
       this.$refs.expanses.validate().then(success => {
@@ -244,8 +240,10 @@ export default {
           this.$refs.billName.validate().then(success2 => {
             if (success2) {
               let submitData = {
+                billId: this.billId,
                 billName: this.billName,
                 memberCount: this.memberCount,
+                totals: this.totals,
                 members: this.members,
               }
               const _this = this
@@ -332,7 +330,27 @@ export default {
         }
       }
     }
-  }
+  },
+  created() {
+    const billId = this.$route.params.billId
+    if (billId) {
+      const _this = this
+      this.$axios.get('/bill/' + billId).then(res => {
+        const bill = res.data.data.bill
+        _this.results = res.data.data.results
+        _this.billId = bill.billId
+        _this.billName = bill.billName
+        _this.memberCount = bill.memberCount
+        _this.resultsOpen = true
+        _this.totals = bill.totals
+        _this.members = bill.members
+      })
+    } else {
+      this.updateTotal(0)
+      this.billName = this.initialBillName
+      this.addMember(this.initialMember - 1)
+    }
+  },
 }
 </script>
 

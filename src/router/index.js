@@ -40,6 +40,10 @@ const routes = [
       {
         path: 'bill',
         component: Bill
+      },
+      {
+        path: 'bill/:billId',
+        component: Bill
       }
     ]
   },
