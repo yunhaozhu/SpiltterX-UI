@@ -4,8 +4,10 @@ import router from './router'
 import store from './store'
 import './assets/tailwind.css'
 import axios from "./axios";
+import VueClipboard from "vue-clipboard2";
 
 Vue.prototype.$axios = axios
+Vue.use(VueClipboard)
 
 Vue.config.productionTip = false
 

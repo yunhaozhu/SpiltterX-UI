@@ -172,7 +172,7 @@
             <div class="flex justify-center mb-5">
               <h2>Who pays who how much:</h2>
             </div>
-            <div class="flex flex-col mx-6 px-6 mb-6 text-base">
+            <div class="flex flex-col mx-6 px-6 mb-8 text-base">
               <div v-for="(result, id) in results" :key="id"
                    class="flex justify-between items-center px-6 h-11 border-t-2 border-r-2 border-l-2 last:border-b-2">
                 <span v-text="result.memberA" class="truncate"></span>
@@ -184,6 +184,17 @@
                 </div>
                 <span v-text="result.memberB" class="truncate">Name 2</span>
               </div>
+            </div>
+            <div class="mx-12 mb-6 rounded border-2 border-green-400">
+              <div class="flex h-10 items-center">
+                <span ref="billLink" class="text-sm mx-3 overflow-auto no-scrollbar">
+                  http://localhost:8080/bill/{{billId}}
+                </span>
+                <button type="button" @click="copyLink" class="mr-3 text-green-500 select-none text-base">Copy</button>
+              </div>
+            </div>
+            <div class="flex h-10 mx-12 mb-12 rounded-md bg-purple-600 hover:bg-purple-700 transition ease-in duration-200 shadow-md">
+              <button type="button" class="w-full mr-3 text-white font-light text-base">Save to my account</button>
             </div>
           </div>
         </div>
@@ -211,7 +222,7 @@ export default {
       maxRule,
       minValueRule,
       billId: "",
-      billName: "Someone's Bill Group",
+      billName: "",
       memberCount: 1,
       resultsOpen: false,
       totals: [0, 0],
@@ -248,7 +259,9 @@ export default {
               }
               const _this = this
               this.$axios.post('/split', submitData).then(res => {
-                _this.results = res.data.data.splitResult})
+                _this.results = res.data.data.splitResult
+                _this.billId = res.data.data.billId
+              })
               this.resultsOpen = true;
             }
           })
@@ -329,6 +342,14 @@ export default {
           }
         }
       }
+    },
+    copyLink() {
+      let billLink = this.$refs.billLink.textContent
+      this.$copyText(billLink).then(() => {
+        alert("Copied!")
+      }, e => {
+        alert("Copy Failed"+ e.text)
+      })
     }
   },
   created() {
