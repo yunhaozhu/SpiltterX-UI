@@ -41,11 +41,14 @@ export default {
       if(!this.dropdownOpen || dropRef.contains(target) || triggerRef.contains(target))
         return;
       this.dropdownOpen = false;
-      this.$emit("dropdownClose")
+      this.$emit("close-dropdown")
     }
   },
   mounted() {
     document.addEventListener('click', this.mouseHandler)
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.mouseHandler)
   }
 }
 </script>

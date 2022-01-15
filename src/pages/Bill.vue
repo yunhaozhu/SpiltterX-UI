@@ -9,7 +9,7 @@
         <div v-for="member in members" :key="member.memberId">
           <div class="flex-col bg-white rounded-lg shadow-card justify-center mb-10">
             <div class="flex justify-between mx-6 pt-8">
-              <validation-provider class="flex flex-col" name="Name" rules="required|max:30" v-slot="{ errors, failed }" :vid="'member'+member.memberId">
+              <validation-provider class="flex flex-col z-0" name="Name" rules="required|max:30" v-slot="{ errors, failed }" :vid="'member'+member.memberId">
                 <div class="flex relative h-10">
                   <div class="absolute flex items-center z-10 pl-2.5 pr-2 h-full text-gray-500 border-r border-gray-300">
                     <svg class="w-6 h-6 stroke-current stroke-2" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -71,7 +71,7 @@
                   </validation-provider>
                   <div class="w-1/5 pl-3">
                     <div class="flex">
-                      <ShareDropdown :shareActive="item.shareActive" @dropdownClose="checkShare(member.memberId, itemIndex)">
+                      <ShareDropdown :shareActive="item.shareActive" @close-dropdown="checkShare(member.memberId, itemIndex)">
                         <div class="flex flex-col mx-3 my-2 w-28">
                           <p class="mt-2 mb-3">Who share this?</p>
                           <div v-for="m in members" :key="m.memberId">
@@ -190,9 +190,19 @@
                 <span ref="billLink" class="text-sm mx-3 overflow-auto no-scrollbar">
                   http://localhost:8080/bill/{{billId}}
                 </span>
-                <button type="button" @click="copyLink" class="mr-3 text-green-500 select-none text-base">Copy</button>
+                <button type="button" @click.stop="copyLink" class="mr-3 text-green-500 select-none text-base">Copy</button>
               </div>
             </div>
+            <SuccessModal :modal-open="copySuccModal" @close-modal="copySuccModal = false">
+              <div class="flex flex-col text-center">
+                <div class="text-xl font-medium mb-4 text-gray-600">
+                  <span>Link Copied</span>
+                </div>
+                <div class="text-base text-gray-500">
+                  <span>Use this link to share with your friends!</span>
+                </div>
+              </div>
+            </SuccessModal>
             <div class="flex h-10 mx-12 mb-12 rounded-md bg-purple-600 hover:bg-purple-700 transition ease-in duration-200 shadow-md">
               <button type="button" class="w-full mr-3 text-white font-light text-base">Save to my account</button>
             </div>
@@ -208,10 +218,12 @@ import ShareDropdown from "@/pages/components/ShareDropdown";
 import { mapState } from "vuex";
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
 import { requiredRule, maxRule, minValueRule } from "@/validation";
+import SuccessModal from "@/pages/components/SuccessModal";
 
 export default {
   name: "Bill",
   components: {
+    SuccessModal,
     ShareDropdown,
     ValidationProvider,
     ValidationObserver,
@@ -221,6 +233,7 @@ export default {
       requiredRule,
       maxRule,
       minValueRule,
+      copySuccModal: false,
       billId: "",
       billName: "",
       memberCount: 1,
@@ -345,12 +358,13 @@ export default {
     },
     copyLink() {
       let billLink = this.$refs.billLink.textContent
+      const _this = this
       this.$copyText(billLink).then(() => {
-        alert("Copied!")
+        _this.copySuccModal = true
       }, e => {
         alert("Copy Failed"+ e.text)
       })
-    }
+    },
   },
   created() {
     const billId = this.$route.params.billId
