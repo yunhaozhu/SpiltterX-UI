@@ -186,7 +186,7 @@
               </div>
             </div>
             <div class="mx-12 mb-6 rounded border-2 border-green-400">
-              <div class="flex h-10 items-center">
+              <div class="flex h-10 items-center justify-between">
                 <span ref="billLink" class="text-sm mx-3 overflow-auto no-scrollbar">
                   http://localhost:8080/bill/{{billId}}
                 </span>
@@ -204,7 +204,7 @@
               </div>
             </SuccessModal>
             <div class="flex h-10 mx-12 mb-12 rounded-md bg-purple-600 hover:bg-purple-700 transition ease-in duration-200 shadow-md">
-              <button type="button" class="w-full mr-3 text-white font-light text-base">Save to my account</button>
+              <button type="button" class="w-full text-white font-light text-base">Save to my account</button>
             </div>
           </div>
         </div>
