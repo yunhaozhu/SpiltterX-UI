@@ -21,6 +21,7 @@ const routes = [
         component: Home,
         meta: {
           title: 'SplitterX',
+          requireAuth: false,
         },
       },
       {
@@ -53,6 +54,28 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to,from,next) =>{
+  if(to.meta.title){
+    document.title = to.meta.title
+  }
+  next();
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requireAuth)) {
+    const token = localStorage.getItem("token")
+    if (token) {
+      next()
+    } else {
+      next({
+        path: '/login'
+      })
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

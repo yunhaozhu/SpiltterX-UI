@@ -193,19 +193,32 @@
                 <button type="button" @click.stop="copyLink" class="mr-3 text-green-500 select-none text-base">Copy</button>
               </div>
             </div>
-            <SuccessModal :modal-open="copySuccModal" @close-modal="copySuccModal = false">
+            <div class="flex h-10 mx-12 mb-12 rounded-md bg-purple-600 hover:bg-purple-700 transition ease-in duration-200 shadow-md">
+              <button type="button" @click.stop="saveBill" class="w-full text-white font-light text-base">Save to my account</button>
+            </div>
+            <SuccessModal :modal-open="successModal" @close-modal="successModal = false">
               <div class="flex flex-col text-center">
                 <div class="text-xl font-medium mb-4 text-gray-600">
-                  <span>Link Copied</span>
+                  <span>{{ successTitle }}</span>
                 </div>
                 <div class="text-base text-gray-500">
-                  <span>Use this link to share with your friends!</span>
+                  <span>{{ successContent }}</span>
                 </div>
               </div>
             </SuccessModal>
-            <div class="flex h-10 mx-12 mb-12 rounded-md bg-purple-600 hover:bg-purple-700 transition ease-in duration-200 shadow-md">
-              <button type="button" class="w-full text-white font-light text-base">Save to my account</button>
-            </div>
+            <WarningModal :modal-open="loginModal" @close-modal="loginModal = false">
+              <div class="flex flex-col text-center">
+                <div class="text-xl mb-2 text-gray-600">
+                  <span>Login Required</span>
+                </div>
+              </div>
+              <div class="flex h-9 mt-6 mb-8 justify-center">
+                <button type="button" @click.stop="startLogin"
+                        class="w-20 text-white text-base rounded-md bg-purple-600 hover:bg-purple-700 transition ease-in duration-200">
+                  Sign In
+                </button>
+              </div>
+            </WarningModal>
           </div>
         </div>
       </div>
@@ -219,6 +232,7 @@ import { mapState } from "vuex";
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
 import { requiredRule, maxRule, minValueRule } from "@/validation";
 import SuccessModal from "@/pages/components/SuccessModal";
+import WarningModal from "@/pages/components/WarningModal";
 
 export default {
   name: "Bill",
@@ -227,13 +241,17 @@ export default {
     ShareDropdown,
     ValidationProvider,
     ValidationObserver,
+    WarningModal
   },
   data() {
     return {
       requiredRule,
       maxRule,
       minValueRule,
-      copySuccModal: false,
+      successModal: false,
+      successTitle: "",
+      successContent: "",
+      loginModal: false,
       billId: "",
       billName: "",
       memberCount: 1,
@@ -360,11 +378,32 @@ export default {
       let billLink = this.$refs.billLink.textContent
       const _this = this
       this.$copyText(billLink).then(() => {
-        _this.copySuccModal = true
+        _this.successTitle = "Link Copied"
+        _this.successContent = "Use this link to share with your friends!"
+        _this.successModal = true
       }, e => {
         alert("Copy Failed"+ e.text)
       })
     },
+    saveBill() {
+      const token = this.$store.state.token
+      if (token) {
+        this.$axios.post('/save-bill', {billId: this.billId}, {
+          headers: {"Authorization": this.$store.state.token}
+        }).then(res => {
+          alert("succ"+res)
+        }, error => {
+          alert(error)
+          console.log(error)
+        })
+      } else {
+        this.loginModal = true
+      }
+    },
+    startLogin() {
+      this.loginModal = false
+      this.$router.push('/login')
+    }
   },
   created() {
     const billId = this.$route.params.billId
