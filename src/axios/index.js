@@ -16,6 +16,9 @@ axios.interceptors.response.use(response =>{
     if(res.code === 200) {
         return response
     } else {
+        if (res.code === 401) {
+            store.commit("removeInfo")
+        }
         return Promise.reject(response.data)
     }
 }, error => {

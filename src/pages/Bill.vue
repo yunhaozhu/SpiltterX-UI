@@ -209,7 +209,7 @@
             <WarningModal :modal-open="loginModal" @close-modal="loginModal = false">
               <div class="flex flex-col text-center">
                 <div class="text-xl mb-2 text-gray-600">
-                  <span>Login Required</span>
+                  <span>{{ loginContent }}</span>
                 </div>
               </div>
               <div class="flex h-9 mt-6 mb-8 justify-center">
@@ -252,6 +252,7 @@ export default {
       successTitle: "",
       successContent: "",
       loginModal: false,
+      loginContent: "",
       billId: "",
       billName: "",
       memberCount: 1,
@@ -390,13 +391,15 @@ export default {
       if (token) {
         this.$axios.post('/save-bill', {billId: this.billId}, {
           headers: {"Authorization": this.$store.state.token}
-        }).then(res => {
-          alert("succ"+res)
+        }).then(() => {
+          this.successTitle = "Bill Saved"
+          this.successModal = true
         }, error => {
-          alert(error)
-          console.log(error)
+          this.loginContent = error.msg
+          this.loginModal = true
         })
       } else {
+        this.loginContent = "Login Required"
         this.loginModal = true
       }
     },
