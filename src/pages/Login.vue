@@ -20,28 +20,44 @@
       <div class="flex items-center justify-between mt-8">
         <span class="w-1/5 border-b lg:w-1/4"></span>
 
-        <p class="text-xs text-center text-gray-500 uppercase">or login with email</p>
+        <p class="text-xs text-center text-gray-500 uppercase">or login with username</p>
 
         <span class="w-1/5 border-b lg:w-1/4"></span>
       </div>
 
-      <div class="mt-8">
-        <label class="block mb-2 text-sm font-medium text-gray-600" for="email">Email Address</label>
-        <input id="email" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md
-               focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="email">
-      </div>
-
-      <div class="mt-6">
-        <div class="flex justify-between">
-          <label class="block mb-2 text-sm font-medium text-gray-600" for="password">Password</label>
-          <a href="#" class="text-xs text-gray-500 transition ease-in-out hover:text-gray-800">Forget Password?</a>
+      <validation-observer ref="loginForms">
+        <div class="mt-8">
+          <label class="block mb-2 text-sm font-medium text-gray-600" for="username">Username</label>
+          <validation-provider name="username" rules="required" v-slot="{ errors, failed }">
+            <div class="flex flex-col">
+              <input id="username" v-model="username" :class="failed ? 'ring-2 ring-red-500' : 'border'"
+                     class="w-full px-4 py-2 text-gray-700 bg-white rounded-md focus:outline-none
+                     focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text">
+              <span class="text-xs font-medium text-red-500 pt-2 text-left">{{ errors[0] }}</span>
+            </div>
+          </validation-provider>
         </div>
-        <input id="password" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md
-               focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="email">
-      </div>
+
+        <div class="mt-6">
+          <div class="flex justify-between">
+            <label class="block mb-2 text-sm font-medium text-gray-600" for="password">Password</label>
+
+            <a href="#" class="text-xs text-gray-500 transition ease-in-out hover:text-gray-800">Forget Password?</a>
+          </div>
+          <validation-provider name="password" rules="required" v-slot="{ errors, failed }">
+            <div class="flex flex-col">
+              <input id="password" v-model="password" :class="failed ? 'ring-2 ring-red-500' : 'border'"
+                     class="w-full px-4 py-2 text-gray-700 bg-white rounded-md focus:outline-none
+                     focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="password">
+              <span class="text-xs font-medium text-red-500 pt-2 text-left">{{ errors[0] }}</span>
+            </div>
+          </validation-provider>
+        </div>
+      </validation-observer>
 
       <div class="my-8">
-        <button class="w-full py-2.5 tracking-wide bg-purple-600 hover:bg-purple-700 focus:ring-purple-500 focus:ring-offset-purple-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg">
+        <button @click.stop="submitForm"
+            class="w-full py-2.5 tracking-wide bg-purple-600 hover:bg-purple-700 focus:ring-purple-500 focus:ring-offset-purple-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg">
           Sign In
         </button>
       </div>
@@ -58,8 +74,46 @@
 </template>
 
 <script>
+import {ValidationObserver, ValidationProvider} from "vee-validate";
+import {requiredRule} from "@/validation";
+
 export default {
-  name: "Login"
+  name: "Login",
+  components: {
+    ValidationProvider,
+    ValidationObserver,
+  },
+  data() {
+    return {
+      requiredRule,
+      username: "",
+      password: "",
+    }
+  },
+  methods: {
+    submitForm() {
+      this.$refs.loginForms.validate().then((success)=> {
+        if (success) {
+          let loginData = {
+            username: this.username,
+            password: this.password
+          }
+          const _this = this
+          this.$axios.post('/login', loginData).then(res => {
+            const userInfo = res.data.data
+            _this.$store.commit("setUserInfo", userInfo)
+            const preRoute = localStorage.getItem("preRoute")
+            if (preRoute) {
+              localStorage.removeItem("preRoute")
+              _this.$router.push(preRoute)
+            }
+          }, error => {
+            alert(error)
+          })
+        }
+      });
+    },
+  }
 }
 </script>
 

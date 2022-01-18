@@ -63,6 +63,13 @@ router.beforeEach((to,from,next) =>{
   next();
 })
 
+router.beforeEach((to,from,next) =>{
+  if(to.path === '/login'){
+    localStorage.setItem("preRoute", router.currentRoute.fullPath)
+  }
+  next();
+})
+
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requireAuth)) {
     const token = localStorage.getItem("token")
