@@ -32,17 +32,22 @@
                   </svg>
                 </button>
               </div>
-              <div class="flex justify-center text-yellow-500 mb-3">
+              <div class="flex justify-center text-red-500 mb-1">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 stroke-current" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                   <circle cx="12" cy="12" r="9" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                  <path d="M10 10l4 4m0 -4l-4 4" />
                 </svg>
               </div>
             </div>
           </div>
           <slot />
+          <div class="flex h-9 mt-6 mb-8 justify-center">
+            <button type="button" @click.stop="$emit('close-modal')"
+                    class="w-20 text-white text-base rounded-md bg-red-500 hover:bg-red-600 transition ease-in duration-200">
+              OK
+            </button>
+          </div>
         </div>
       </div>
     </transition>
@@ -51,7 +56,7 @@
 
 <script>
 export default {
-  name: "WarningModal",
+  name: "ErrorModal",
   props: ['modalOpen'],
   methods: {
     mouseHandler({target}){

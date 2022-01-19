@@ -108,7 +108,10 @@ export default {
               _this.$router.push(preRoute)
             }
           }, error => {
-            alert(error)
+            this.$refs.loginForms.setErrors({
+              username: [error.msg],
+              password: [error.msg]
+            })
           })
         }
       });
