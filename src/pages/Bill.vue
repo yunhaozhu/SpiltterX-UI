@@ -289,10 +289,9 @@ export default {
                 totals: this.totals,
                 members: this.members,
               }
-              const _this = this
               this.$axios.post('/split', submitData).then(res => {
-                _this.results = res.data.data.splitResult
-                _this.billId = res.data.data.billId
+                this.results = res.data.data.splitResult
+                this.billId = res.data.data.billId
               })
               this.resultsOpen = true;
             }
@@ -377,11 +376,10 @@ export default {
     },
     copyLink() {
       let billLink = this.$refs.billLink.textContent
-      const _this = this
       this.$copyText(billLink).then(() => {
-        _this.successTitle = "Link Copied"
-        _this.successContent = "Use this link to share with your friends!"
-        _this.successModal = true
+        this.successTitle = "Link Copied"
+        this.successContent = "Use this link to share with your friends!"
+        this.successModal = true
       }, e => {
         alert("Copy Failed"+ e.text)
       })
@@ -411,16 +409,15 @@ export default {
   created() {
     const billId = this.$route.params.billId
     if (billId) {
-      const _this = this
       this.$axios.get('/bill/' + billId).then(res => {
         const bill = res.data.data.bill
-        _this.results = res.data.data.results
-        _this.billId = bill.billId
-        _this.billName = bill.billName
-        _this.memberCount = bill.memberCount
-        _this.resultsOpen = true
-        _this.totals = bill.totals
-        _this.members = bill.members
+        this.results = res.data.data.results
+        this.billId = bill.billId
+        this.billName = bill.billName
+        this.memberCount = bill.memberCount
+        this.resultsOpen = true
+        this.totals = bill.totals
+        this.members = bill.members
       })
     } else {
       this.updateTotal(0)

@@ -98,14 +98,13 @@ export default {
             username: this.username,
             password: this.password
           }
-          const _this = this
           this.$axios.post('/login', loginData).then(res => {
             const userInfo = res.data.data
-            _this.$store.commit("setUserInfo", userInfo)
+            this.$store.commit("setUserInfo", userInfo)
             const preRoute = localStorage.getItem("preRoute")
             if (preRoute) {
               localStorage.removeItem("preRoute")
-              _this.$router.push(preRoute)
+              this.$router.push(preRoute)
             }
           }, error => {
             this.$refs.loginForms.setErrors({
