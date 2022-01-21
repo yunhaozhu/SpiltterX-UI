@@ -99,7 +99,7 @@ export default {
             password: this.password
           }
           this.$axios.post('/login', loginData).then(res => {
-            const userInfo = res.data.data
+            const userInfo = res.data
             this.$store.commit("setUserInfo", userInfo)
             const preRoute = localStorage.getItem("preRoute")
             if (preRoute) {

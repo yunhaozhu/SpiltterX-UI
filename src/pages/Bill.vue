@@ -290,8 +290,8 @@ export default {
                 members: this.members,
               }
               this.$axios.post('/split', submitData).then(res => {
-                this.results = res.data.data.splitResult
-                this.billId = res.data.data.billId
+                this.results = res.data.splitResult
+                this.billId = res.data.billId
               })
               this.resultsOpen = true;
             }
@@ -387,12 +387,14 @@ export default {
     saveBill() {
       const token = this.$store.state.token
       if (token) {
-        this.$axios.post('/save-bill', {billId: this.billId}, {
+        this.$axios.get('/save-bill', {
+          params: {billId: this.billId},
           headers: {"Authorization": this.$store.state.token}
-        }).then(() => {
+        }).then((res) => {
           this.successTitle = "Bill Saved"
+          this.successContent = res.msg
           this.successModal = true
-        }, error => {
+        }).catch(error => {
           this.loginContent = error.msg
           this.loginModal = true
         })
@@ -410,8 +412,8 @@ export default {
     const billId = this.$route.params.billId
     if (billId) {
       this.$axios.get('/bill/' + billId).then(res => {
-        const bill = res.data.data.bill
-        this.results = res.data.data.results
+        const bill = res.data.bill
+        this.results = res.data.results
         this.billId = bill.billId
         this.billName = bill.billName
         this.memberCount = bill.memberCount
